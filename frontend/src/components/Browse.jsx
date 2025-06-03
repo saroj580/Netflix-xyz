@@ -6,7 +6,6 @@ function Browse() {
         <div>
             <Header />
             <div>
-                browse
             </div>
         </div>
     )

@@ -1,9 +1,18 @@
 import React, { useState } from 'react'
 import Header from './Header'
+import ForgetPassword from './ForgetPassword';
 
 function Login() {
   const [isLogin, setIsLogin] = useState(false);
+  const [showForgot, setShowForgot] = useState(false);
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
+  const getInputData = (e) => {
+    e.preventDefault();
+    console.log(fullName, email, password);
+  }
   return (
     <div>
       <Header />
@@ -16,63 +25,74 @@ function Login() {
       </div>
 
       <div className="absolute inset-0 z-20 flex justify-center items-center top-20">
-        <div className="bg-black opacity-90 p-10 rounded-md w-full max-w-md top-4">
-          <h1 className="text-white text-3xl font-bold mb-6">
-            {isLogin ? 'Sign In' : 'Sign Up'}
-          </h1>
-
-          <form className="flex flex-col space-y-4">
-            {!isLogin && (
+        {showForgot ? (
+          <ForgetPassword onBack={() => setShowForgot(false)} />
+        ) : (
+          <div className="bg-black opacity-80 p-10 rounded-md w-full max-w-md">
+            <h1 className="text-white text-3xl font-bold mb-6">
+              {isLogin ? 'Sign In' : 'Sign Up'}
+            </h1>
+        
+            <form className="flex flex-col space-y-4" onSubmit={getInputData}>
+              {!isLogin && (
+                <input
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}  
+                  placeholder="Full Name"
+                  className="p-3 rounded bg-gray-800 text-white placeholder-gray-400 outline-none"
+                />
+              )}
               <input
                 type="text"
-                placeholder="Full Name"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}   
+                placeholder="Email or mobile number"
                 className="p-3 rounded bg-gray-800 text-white placeholder-gray-400 outline-none"
               />
-            )}
-            <input
-              type="text"
-              placeholder="Email or mobile number"
-              className="p-3 rounded bg-gray-800 text-white placeholder-gray-400 outline-none"
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              className="p-3 rounded bg-gray-800 text-white placeholder-gray-400 outline-none"
-            />
+              <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}   
+                type="password"
+                placeholder="Password"
+                className="p-3 rounded bg-gray-800 text-white placeholder-gray-400 outline-none"
+              />
 
-            <button
-              type="submit"
-              className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded mt-2"
-            >
-              {isLogin ? 'Sign In' : 'Sign Up'}
-            </button>
-
-            <div className="flex justify-between items-center text-sm text-gray-300 mt-3">
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  defaultChecked
-                  className="form-checkbox accent-white"
-                />
-                <span>Remember me</span>
-              </label>
-              <a href="#" className="hover:underline">
-                Forgot password?
-              </a>
+              <button
+                type="submit"
+                className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded mt-2"
+              >
+                {isLogin ? 'Sign In' : 'Sign Up'}
+              </button>
+            
+              <div className="flex justify-between items-center text-sm text-gray-300 mt-3">
+                <label className="flex items-center space-x-2">
+                  <input type="checkbox" defaultChecked className="accent-white" />
+                  <span>Remember me</span>
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setShowForgot(true)}
+                  className="hover:underline"
+                >
+                  Forgot password?
+                </button>
+              </div>
+            </form>
+            
+            <div className="text-gray-400 mt-6 text-sm">
+              {isLogin ? "New to Netflix?" : "Already have an account?"}
+              <span
+                className="text-white font-medium ml-2 hover:underline cursor-pointer"
+                onClick={() => setIsLogin(!isLogin)}
+              >
+                {isLogin ? "Sign up now" : "Sign in"}
+              </span>
             </div>
-          </form>
-
-          <div className="text-gray-400 mt-6 text-sm">
-            {isLogin ? "New to Netflix?" : "Already have an account?"}
-            <span
-              className="text-white font-medium ml-2 hover:underline cursor-pointer"
-              onClick={() => setIsLogin(!isLogin)}
-            >
-              {isLogin ? "Sign up now" : "Sign in"}
-            </span>
           </div>
-        </div>
+        )}
       </div>
+      
 
 
       {/* <form className='absolute flex flex-col items-center  justify-center mx-auto left-0 right-0 p-12 my-36 w-3/9 bg-black opacity-80'>

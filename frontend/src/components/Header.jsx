@@ -5,7 +5,7 @@ function Header() {
   return (
     <div className='absolute z-10 flex w-[100%] items-center justify-between bg-gradient-to-b from-black px-6 py-4'>
       <img
-        className='w-56'
+        className='w-36 ml-32 '
         src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1198px-Netflix_2015_logo.svg.png?20190206123158"
         alt="netflixLogo"
       />

@@ -19,8 +19,17 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
+app.get('/', (req, res) => {
+    res.status(200).json(
+        {
+            message: "Hello from backend",
+            success : true
+        }
+    )
+})
+
 //routes/api
-app.use("api/v1/user", userRoute);
+app.use("/api/v1/user", userRoute);
 
 
 // Error handler middleware (should be after routes)

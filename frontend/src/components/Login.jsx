@@ -5,6 +5,11 @@ import axios from 'axios'
 import { ApiEndPoints } from '../utils/constant';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../redux/userSlice';
+
+axios.defaults.withCredentials = true;
 
 function Login() {
   const [isLogin, setIsLogin] = useState(false);
@@ -13,7 +18,8 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [errors, setErrors] = useState({
     email: "",
@@ -64,10 +70,20 @@ function Login() {
         const res = await axios.post("http://localhost:8080/api/v1/user/login", {
           email,
           password
+        }, {
+          withCredentials: true
         });
         console.log("Login response:", res);
         if (res.data.success) {
+          // Dispatch login success action with user data
+          dispatch(loginSuccess({
+            fullName: res.data.user?.fullName || 'User',
+            email: email
+          }));
+          
           toast.success(res.data.message);
+          console.log("Login success, redirecting to browse page");
+          navigate('/browse');
         }
 
       } catch (error) {
@@ -102,7 +118,9 @@ function Login() {
 
         if (res.data.success) {
           toast.success(res.data.message);
+          setIsLogin(true);
         }
+
 
       } catch (error) {
 

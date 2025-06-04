@@ -9,10 +9,16 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  
   const getInputData = (e) => {
     e.preventDefault();
     console.log(fullName, email, password);
+    setFullName("");
+    setEmail("");
+    setPassword("");
   }
+
+
   return (
     <div>
       <Header />

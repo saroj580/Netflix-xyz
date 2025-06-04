@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from 'dotenv';
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 import databaseConnection from "./utils/database.js";
 import errorHandler from "./handler/errorHandler.js";
@@ -19,6 +20,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
+const corsOptions = {
+    origin: 'http://localhost:5173',
+    credentials: true,
+    optionsSuccessStatus: 200
+}; 
+app.use(cors(corsOptions));
+
 app.get('/', (req, res) => {
     res.status(200).json(
         {
@@ -35,6 +43,8 @@ app.use("/api/v1/user", userRoute);
 // Error handler middleware (should be after routes)
 app.use(errorHandler);
 
-app.listen(process.env.PORT, (req, res) => {
-    console.log(`Server is starting at http://localhost:${process.env.PORT}`);
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+    console.log(`Server is starting at http://localhost:${PORT}`);
+    console.log(`API endpoint should be: http://localhost:${PORT}/api/v1/user`);
 })

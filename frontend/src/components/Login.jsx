@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import Header from './Header'
 import ForgetPassword from './ForgetPassword';
+import axios from 'axios'
+import { ApiEndPoints } from '../utils/constant';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import toast from 'react-hot-toast';
 
 function Login() {
   const [isLogin, setIsLogin] = useState(false);
@@ -8,11 +12,116 @@ function Login() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-  
-  const getInputData = (e) => {
+
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+    fullName: ""
+  });
+
+  console.log("API Endpoint:", ApiEndPoints);
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const getInputData = async(e) => {
     e.preventDefault();
-    console.log(fullName, email, password);
+    
+    // Reset errors
+    setErrors({
+      email: "",
+      password: "",
+      fullName: ""
+    });
+    
+   
+    if (!validateEmail(email)) {
+      setErrors(prev => ({...prev, email: "Please enter a valid email address"}));
+      return;
+    }
+    
+    
+    if (password.length < 6) {
+      setErrors(prev => ({...prev, password: "Password must be at least 6 characters"}));
+      return;
+    }
+    
+  
+    if (!isLogin && fullName.trim() === "") {
+      setErrors(prev => ({...prev, fullName: "Full name is required"}));
+      return;
+    }
+
+    if (isLogin) {
+      //login
+      try {
+        // Trying with hardcoded URL to test
+        console.log("Attempting login with direct URL");
+        const res = await axios.post("http://localhost:8080/api/v1/user/login", {
+          email,
+          password
+        });
+        console.log("Login response:", res);
+        if (res.data.success) {
+          toast.success(res.data.message);
+        }
+
+      } catch (error) {
+
+        console.log("Login error type:", typeof error);
+        console.log("Full error object:", error);
+
+        if (error.response) {
+          console.log("Error response:", error.response.data);
+          console.log("Status code:", error.response.status);
+        } else if (error.request) {
+          console.log("No response received:", error.request);
+        } else {
+          console.log("Error:", error.message);
+        }
+        toast.error(error.response.data.message);
+      }
+
+      return;
+
+    } else {
+
+      //register
+      try {
+        const res = await axios.post("http://localhost:8080/api/v1/user/register", {
+          fullName,
+          email,
+          password
+        });
+
+        console.log("Register response:", res);
+
+        if (res.data.success) {
+          toast.success(res.data.message);
+        }
+
+      } catch (error) {
+
+        console.log("Register error type:", typeof error);
+        console.log("Full error object:", error);
+
+        if (error.response) {
+          console.log("Error response:", error.response.data);
+          console.log("Status code:", error.response.status);
+        } else if (error.request) {
+          console.log("No response received:", error.request);
+        } else {
+          console.log("Error:", error.message);
+        }
+        toast.error(error.response.data.message);
+
+      }
+    }
+    
     setFullName("");
     setEmail("");
     setPassword("");
@@ -41,28 +150,44 @@ function Login() {
         
             <form className="flex flex-col space-y-4" onSubmit={getInputData}>
               {!isLogin && (
+                <div>
+                  <input
+                    type="text"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}  
+                    placeholder="Full Name"
+                    className={`p-3 rounded bg-gray-800 text-white placeholder-gray-400 outline-none w-full ${errors.fullName ? "border border-red-500" : ""}`}
+                  />
+                  {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>}
+                </div>
+              )}
+              <div>
                 <input
                   type="text"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}  
-                  placeholder="Full Name"
-                  className="p-3 rounded bg-gray-800 text-white placeholder-gray-400 outline-none"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}   
+                  placeholder="Email or mobile number"
+                  className={`p-3 rounded bg-gray-800 text-white placeholder-gray-400 outline-none w-full ${errors.email ? "border border-red-500" : ""}`}
                 />
-              )}
-              <input
-                type="text"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}   
-                placeholder="Email or mobile number"
-                className="p-3 rounded bg-gray-800 text-white placeholder-gray-400 outline-none"
-              />
-              <input
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}   
-                type="password"
-                placeholder="Password"
-                className="p-3 rounded bg-gray-800 text-white placeholder-gray-400 outline-none"
-              />
+                {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+              </div>
+              <div className="relative">
+                <input
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}   
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  className={`p-3 rounded bg-gray-800 text-white placeholder-gray-400 outline-none w-full ${errors.password ? "border border-red-500" : ""}`}
+                />
+                <button 
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+                {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+              </div>
 
               <button
                 type="submit"

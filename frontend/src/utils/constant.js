@@ -4,14 +4,14 @@ export const options = {
   method: 'GET',
   headers: {
     accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZGJlZjViMDUzNWE3OGYwMjllMTQ0NDE5NTQ4MjM4MCIsInN1YiI6IjY1MDRhMjNkNTllOGE5MDExZWNhYTVjZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LTBaAb_2NPRGPr2HeGszyFDP-onLh-fiL7fzmnOFZUg'
+    Authorization: `Bearer ${process.env.TMDB_BEARER_TOKEN}`
   }
 };
-export const Now_Playing_Movie = "https://api.themoviedb.org/3/movie/now_playing";
-export const Popular_Movie = "https://api.themoviedb.org/3/movie/popular";
-export const Top_Rated_Movie = "https://api.themoviedb.org/3/movie/top_rated";
-export const Upcoming_Movie = "https://api.themoviedb.org/3/movie/upcoming";
+export const Now_Playing_Movie = process.env.Now_Playing_Movie;
+export const Popular_Movie = process.env.Popular_Movie;
+export const Top_Rated_Movie = process.env.Top_Rated_Movie;
+export const Upcoming_Movie = process.env.Upcoming_Movie;
 
-export const  SEARCH_MOVIE_URL="https://api.themoviedb.org/3/search/movie?query=";
+export const  SEARCH_MOVIE_URL=process.env.SEARCH_MOVIE_URL;
 
-export const TMDB_IMG_URL = "https://image.tmdb.org/t/p/w500";
+export const TMDB_IMG_URL = process.env.TMDB_IMG_URL;

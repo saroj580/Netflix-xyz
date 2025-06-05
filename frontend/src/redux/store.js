@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './userSlice'
+import movieReducer from './movieSlice'
 
 const loadState = () => {
   try {
@@ -43,6 +44,7 @@ const preloadedState = loadState();
 const store = configureStore({
   reducer: {
     user: userReducer,
+    movie: movieReducer
   },
   preloadedState
 });

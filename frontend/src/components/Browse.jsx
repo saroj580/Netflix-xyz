@@ -3,12 +3,14 @@ import Header from './Header'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import MainContainer from './MainContainer';
+import MovieContainer from './MovieContainer';
 
 function Browse() {
     const user = useSelector((store) => store.user.user);
     const navigate = useNavigate();
 
-    // Check authentication immediately when component mounts
+    // Checking authentication immediately when component mounts
     useEffect(() => {
         console.log("Browse component mounted, user:", user);
         
@@ -16,7 +18,7 @@ function Browse() {
         if (!user) {
             console.log("No user found, redirecting to login");
             
-            // Check if this was an intentional logout
+            // Checking if this was an intentional logout
             const intentionalLogout = localStorage.getItem('intentionalLogout') === 'true';
             
             // Only show toast if it wasn't an intentional logout
@@ -43,7 +45,8 @@ function Browse() {
         <div>
             <Header />
             <div>
-                <h1>Browse Page - You are logged in as {user.fullName}</h1>
+                <MainContainer />
+                <MovieContainer/>
             </div>
         </div>
     )

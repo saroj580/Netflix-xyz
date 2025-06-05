@@ -10,10 +10,16 @@ function Browse() {
     const toastShownRef = useRef(false);
 
     useEffect(() => {
-        if (!user && !toastShownRef.current) {
+        //checkign if the user intentionally logged out
+        const intentionalLogout = localStorage.getItem('intentionalLogout') === 'true';
+        if (!user && !toastShownRef.current && !intentionalLogout) {
             toastShownRef.current = true;
             toast.error("Please login to continue");
             navigate("/");
+        }
+
+        if (user) {
+            localStorage.removeItem('intentionalLogout');
         }
     }, [user, navigate]);
 

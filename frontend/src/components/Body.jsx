@@ -1,14 +1,17 @@
-import React from 'react'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import Login from './Login'
 import Browse from './Browse'
+import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
 function Body() {
+    const user = useSelector((store) => store.user.user);
+
     const appRouter = createBrowserRouter(
         [
             {
                 path: '/',
-                element: <Login />,
+                element: user ? <Navigate to="/browse" /> : <Login />,
             },
             {
                 path: '/browse',

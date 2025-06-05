@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux';
 import Header from './Header'
 import ForgetPassword from './ForgetPassword';
 import axios from 'axios'
@@ -12,6 +13,7 @@ import { loginSuccess } from '../redux/userSlice';
 axios.defaults.withCredentials = true;
 
 function Login() {
+  const user = useSelector((store) => store.user.user);
   const [isLogin, setIsLogin] = useState(false);
   const [showForgot, setShowForgot] = useState(false);
   const [fullName, setFullName] = useState("");
@@ -20,6 +22,12 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
+  useEffect(() => {
+    if (user) {
+      navigate('/browse');
+    }
+  }, [user, navigate]);
 
   const [errors, setErrors] = useState({
     email: "",
@@ -43,6 +51,10 @@ function Login() {
       password: "",
       fullName: ""
     });
+
+    console.log("Validating email", email);
+    console.log("Email Validation result: ", validateEmail(email));
+    
     
    
     if (!validateEmail(email)) {
@@ -183,7 +195,13 @@ function Login() {
                 <input
                   type="text"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}   
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    // Clear the error when user starts typing
+                    if (errors.email) {
+                      setErrors(prev => ({...prev, email: ""}));
+                    }
+                  }}   
                   placeholder="Email or mobile number"
                   className={`p-3 rounded bg-gray-800 text-white placeholder-gray-400 outline-none w-full ${errors.email ? "border border-red-500" : ""}`}
                 />

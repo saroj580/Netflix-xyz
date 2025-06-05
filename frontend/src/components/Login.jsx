@@ -8,7 +8,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { loginSuccess } from '../redux/userSlice';
+import { loginSuccess, setLoading } from '../redux/userSlice';
 
 axios.defaults.withCredentials = true;
 
@@ -22,10 +22,20 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const isLoading = useSelector((store) => store.user.loading);
   
+
   useEffect(() => {
+    dispatch(setLoading(false));
+  }, [dispatch]);
+
+  useEffect(() => {
+    console.log("Login component mounted, user:", user);
+    
+    // If user is already logged in, redirect to browse
     if (user) {
-      navigate('/browse');
+      console.log("User already logged in, redirecting to browse");
+      navigate('/browse', { replace: true });
     }
   }, [user, navigate]);
 
@@ -44,7 +54,7 @@ function Login() {
 
   const getInputData = async(e) => {
     e.preventDefault();
-    
+    dispatch(setLoading(true));
     // Reset errors
     setErrors({
       email: "",
@@ -73,6 +83,8 @@ function Login() {
       setErrors(prev => ({...prev, fullName: "Full name is required"}));
       return;
     }
+
+    
 
     if (isLogin) {
       //login
@@ -112,13 +124,14 @@ function Login() {
           console.log("Error:", error.message);
         }
         toast.error(error.response.data.message);
+      }finally {
+        dispatch(setLoading(false)); 
       }
-
-      return;
 
     } else {
 
       //register
+      dispatch(setLoading(true));
       try {
         const res = await axios.post("http://localhost:8080/api/v1/user/register", {
           fullName,
@@ -149,6 +162,8 @@ function Login() {
         }
         toast.error(error.response.data.message);
 
+      } finally {
+        dispatch(setLoading(false));
       }
     }
     
@@ -229,7 +244,7 @@ function Login() {
                 type="submit"
                 className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded mt-2"
               >
-                {isLogin ? 'Sign In' : 'Sign Up'}
+                {`${isLoading ? 'Loading...' : (isLogin ? 'Sign In' : 'Sign Up')}`}
               </button>
             
               <div className="flex justify-between items-center text-sm text-gray-300 mt-3">

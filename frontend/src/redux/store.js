@@ -7,7 +7,14 @@ const loadState = () => {
     if (serializedState === null) {
       return undefined;
     }
-    return JSON.parse(serializedState);
+    const parsedState = JSON.parse(serializedState);
+    
+    // Reset loading state to false when loading from localStorage
+    if (parsedState.user) {
+      parsedState.user.loading = false;
+    }
+    
+    return parsedState;
   } catch (err) {
     console.log('Error loading state from localStorage:', err);
     return undefined;
@@ -16,7 +23,15 @@ const loadState = () => {
 
 const saveState = (state) => {
   try {
-    const serializedState = JSON.stringify(state);
+    // Create a copy of the state to modify
+    const stateToSave = JSON.parse(JSON.stringify(state));
+    
+    // Reset loading state to false before saving
+    if (stateToSave.user) {
+      stateToSave.user.loading = false;
+    }
+    
+    const serializedState = JSON.stringify(stateToSave);
     localStorage.setItem('reduxState', serializedState);
   } catch (err) {
     console.log('Error saving state to localStorage:', err);

@@ -6,6 +6,7 @@ const initialState = {
     popularMovie: [],
     topRatedMovie: [],
     upcomingMovie: [],
+    searchTerm: '',
     // searchResults: null,
     // loading: false,
     // error: null
@@ -28,8 +29,11 @@ const movieSlice = createSlice({
         getUpcomingMovies: (state, action) => {
             state.upcomingMovie = action.payload;
         },
+        setSearchTerm: (state, action) => {
+            state.searchTerm = action.payload;
+        },
     }
 });
 
-export const { getNowPlayingMovies, getPopularMovies, getTopRatedMovies, getUpcomingMovies } = movieSlice.actions;
+export const { getNowPlayingMovies, getPopularMovies, getTopRatedMovies, getUpcomingMovies, setSearchTerm } = movieSlice.actions;
 export default movieSlice.reducer;

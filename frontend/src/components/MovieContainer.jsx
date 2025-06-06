@@ -19,20 +19,28 @@ function MovieContainer() {
     }
 
     return (
-        <div>
-            {movies.map((movie, idx) => (
-                <div key={idx} className="bg-gray-800 p-4 m-2 rounded">
-                    <h2 className="text-xl font-bold text-white">
-                        {movie.short?.name || movie.title || movie.name}
-                    </h2>
-                    <p className="text-gray-300">
-                        {movie.short?.description || movie.description || movie.plot || movie.overview}
-                    </p>
-                    {movie.short?.image && (
-                        <img src={movie.short.image} alt={movie.short?.name} className="my-2 w-48" />
-                    )}
-                </div>
-            ))}
+        <div className="overflow-x-auto whitespace-nowrap py-4" style={{background: '#232a34'}}>
+            <div className="flex flex-row gap-6" style={{minWidth: 'max-content'}}>
+                {movies.map((movie, idx) => (
+                    <div key={idx} className="bg-gray-800 rounded-lg shadow-lg p-4 w-64 flex-shrink-0 flex flex-col items-center">
+                        {movie['#IMG_POSTER'] && (
+                            <img src={movie['#IMG_POSTER']} alt={movie['#TITLE']} className="mb-3 w-full h-80 object-cover rounded" />
+                        )}
+                        <h2 className="text-lg font-bold text-white mb-1 text-center">
+                            {movie['#TITLE'] || movie.title || movie.name}
+                        </h2>
+                        <p className="text-gray-300 text-sm mb-1 text-center">
+                            Year: {movie['#YEAR']}
+                        </p>
+                        <p className="text-gray-400 text-xs mb-2 text-center">
+                            Actors: {movie['#ACTORS']}
+                        </p>
+                        <a href={movie['#IMDB_URL']} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline text-xs text-center">
+                            View on IMDB
+                        </a>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }

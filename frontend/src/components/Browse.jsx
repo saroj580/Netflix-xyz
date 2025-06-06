@@ -15,7 +15,6 @@ function Browse() {
     const user = useSelector((store) => store.user.user);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
     const [query, setQuery] = useState('');
 
     //custom hooks
@@ -23,7 +22,7 @@ function Browse() {
     usePopularMovies();
     useTopRatedMovies();
     useUpcomingMovies();
-    useImdbMovies(query);
+    useImdbMovies();
     
     // Authentication check useEffect
     useEffect(() => {

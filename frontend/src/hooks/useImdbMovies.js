@@ -1,18 +1,21 @@
 import { useEffect } from 'react';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getNowPlayingMovies } from '../redux/movieSlice';
-import { IMDB_BASE_URL } from '../utils/constant';
 
-const useImdbMovies = (searchTerm) => {
+const useImdbMovies = () => {
     const dispatch = useDispatch();
+    const searchTerm = useSelector((state) => state.movie.searchTerm);
+
     useEffect(() => {
         if (!searchTerm) return;
         axios.get(`/api/v1/imdb/search?q=${encodeURIComponent(searchTerm)}`)
             .then(res => {
                 console.log('IMDB API response:', res.data);
                 let moviesArray = [];
-                if (Array.isArray(res.data)) {
+                if (Array.isArray(res.data.description)) {
+                    moviesArray = res.data.description;
+                } else if (Array.isArray(res.data)) {
                     moviesArray = res.data;
                 } else if (Array.isArray(res.data.results)) {
                     moviesArray = res.data.results;

@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import Header from './Header'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import MainContainer from './MainContainer';
 import MovieContainer from './MovieContainer';
 import useNowPlayingMovies from '../hooks/useNowPlayingMovies';
 import usePopularMovies from '../hooks/usePopularMovies';
 import useTopRatedMovies from '../hooks/useTopRatedMovies';
 import useUpcomingMovies from '../hooks/useUpcomingMovies';
 import useImdbMovies from '../hooks/useImdbMovies';
+import VideoBackgground from './VideoBackgground'; 
+import MovieRow from './MovieRow';
+import { crimeMovies, tvShows, top10, shuffleArray } from '../data/movie';
 
 function Browse() {
     const user = useSelector((store) => store.user.user);
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
-    const [query, setQuery] = useState('');
+    const searchTerm = useSelector((state) => state.movie.searchTerm);
 
     //custom hooks
     useNowPlayingMovies();
@@ -50,18 +51,26 @@ function Browse() {
 
     console.log("User authenticated, rendering Browse component");
 
+    // Shuffle the movies for each row only once on mount
+    const shuffledCrime = useMemo(() => shuffleArray(crimeMovies), []);
+    const shuffledTV = useMemo(() => shuffleArray(tvShows), []);
+    const shuffledTop10 = useMemo(() => shuffleArray(top10), []);
+
     return (
         <div>
             <Header />
-            <div>
-                <MainContainer />
-                {loading ? (
-                    <div className="flex justify-center items-center h-64">
-                        <p className="text-white">Loading movies...</p>
-                    </div>
-                ) : (
-                    <MovieContainer />
-                )}
+            <VideoBackgground />
+            <div className="px-8">
+                {searchTerm
+                    ? <MovieContainer />
+                    : (
+                        <>
+                            <MovieRow title="Crime & Thriller Movies" movies={shuffledCrime} />
+                            <MovieRow title="Critically Acclaimed TV Shows" movies={shuffledTV} />
+                            <MovieRow title="Top 10 Movies in Netflix Today" movies={shuffledTop10} />
+                        </>
+                    )
+                }
             </div>
         </div>
     )

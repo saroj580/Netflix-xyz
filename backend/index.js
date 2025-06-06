@@ -6,6 +6,7 @@ import cors from "cors";
 import databaseConnection from "./utils/database.js";
 import errorHandler from "./handler/errorHandler.js";
 import userRoute from './routes/user.route.js';
+import imdbRoute from './routes/imdb.route.js';
 
 databaseConnection();
 
@@ -38,6 +39,7 @@ app.get('/', (req, res) => {
 
 //routes/api
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/imdb", imdbRoute);
 
 
 // Error handler middleware (should be after routes)

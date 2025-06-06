@@ -1,17 +1,20 @@
-import axios from "axios";
-import { options, Top_Rated_Movie } from '../utils/constant';
-import { getTopRatedMovie } from '../redux/movieSlice';
-import {useDispatch} from "react-redux";
+import { useEffect } from 'react';
+import axios from 'axios';
+import { getPopularMovies } from "../redux/movieSlice";
+import { IMDB_BASE_URL } from "../utils/constant";
+import { useDispatch } from "react-redux";
 
-
-const useTopRatedMovies = async () => {
+const usePopularMovies = () => {
     const dispatch = useDispatch();
-    try {
-        const res = await axios.get(Top_Rated_Movie, options);
-        dispatch(getTopRatedMovie(res.data.results))
-    } catch (error) {
-        console.log(error);
-    }
+    useEffect(() => {
+        axios.get(`/api/v1/imdb/search?q=top rated`)
+            .then(res => {
+                dispatch(getPopularMovies(res.data.results || res.data));
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }, [dispatch]);
 }
 
-export default useTopRatedMovies;
+export default usePopularMovies;

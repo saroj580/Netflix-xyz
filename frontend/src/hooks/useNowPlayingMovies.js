@@ -1,15 +1,20 @@
-import axios from "axios";
+import { useEffect } from 'react';
+import axios from 'axios';
 import { getNowPlayingMovies } from "../redux/movieSlice";
-import { Now_Playing_Movie, options } from "../utils/constant";
-import {useDispatch} from "react-redux";
+import { IMDB_BASE_URL } from "../utils/constant";
+import { useDispatch } from "react-redux";
 
-const useNowPlayingMovies = async () => {
+const useNowPlayingMovies = () => {
     const dispatch = useDispatch();
-    try {
-        const res = await axios.get(Now_Playing_Movie, options);
-        dispatch(getNowPlayingMovies(res.data.results));
-    } catch (error) {
-        console.log(error);
-    }
+    useEffect(() => {
+        axios.get(`/api/v1/imdb/search?q=now playing`)
+            .then(res => {
+                dispatch(getNowPlayingMovies(res.data.results || res.data));
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }, [dispatch]);
 }
+
 export default useNowPlayingMovies;

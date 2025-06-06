@@ -9,17 +9,21 @@ import useNowPlayingMovies from '../hooks/useNowPlayingMovies';
 import usePopularMovies from '../hooks/usePopularMovies';
 import useTopRatedMovies from '../hooks/useTopRatedMovies';
 import useUpcomingMovies from '../hooks/useUpcomingMovies';
+import useImdbMovies from '../hooks/useImdbMovies';
 
 function Browse() {
     const user = useSelector((store) => store.user.user);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [query, setQuery] = useState('');
 
     //custom hooks
     useNowPlayingMovies();
     usePopularMovies();
     useTopRatedMovies();
     useUpcomingMovies();
+    useImdbMovies(query);
     
     // Authentication check useEffect
     useEffect(() => {

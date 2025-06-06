@@ -10,8 +10,6 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginSuccess, setLoading } from '../redux/userSlice';
 
-axios.defaults.withCredentials = true;
-
 function Login() {
   const user = useSelector((store) => store.user.user);
   const [isLogin, setIsLogin] = useState(false);

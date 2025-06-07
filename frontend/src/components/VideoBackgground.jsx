@@ -1,5 +1,3 @@
-import React from 'react';
-
 function VideoBackgground() {
     return (
         <div style={{
@@ -10,8 +8,10 @@ function VideoBackgground() {
             pointerEvents: 'none'
         }}>
             <iframe
-                src="https://www.youtube.com/embed/B9VRvOKKwfs?si=P0m_DDV1SA78ov2x&autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=B9VRvOKKwfs"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                className="absolute top-0 left-0 w-full h-full object-cover z-0"
+                src="https://www.youtube.com/embed/B9VRvOKKwfs?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=B9VRvOKKwfs"
+                frameBorder="0"
+                allow="autoplay; encrypted-media"
                 allowFullScreen
                 style={{
                     position: 'absolute',
@@ -20,7 +20,8 @@ function VideoBackgground() {
                     width: '100vw',
                     height: '100vh',
                     transform: 'translate(-50%, -50%)',
-                    pointerEvents: 'none'
+                    pointerEvents: 'none',
+                    zIndex: 0
                 }}
                 title="Background Video"
             />

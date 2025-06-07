@@ -45,8 +45,7 @@ function Browse() {
     }, [user, navigate]);
 
     if (!user) {
-        console.log("User not authenticated, rendering null");
-        return null;
+        return <div>Redirecting...</div>;
     }
 
     console.log("User authenticated, rendering Browse component");
@@ -60,7 +59,7 @@ function Browse() {
         <div>
             <Header />
             <VideoBackgground />
-            <div className="px-8">
+            <div>
                 {searchTerm
                     ? <MovieContainer />
                     : (
